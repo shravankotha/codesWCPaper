@@ -86,10 +86,11 @@ for frameNumber in range(1,totalNoFrames):
     volumetricGradT_3 = volumetricGradT_3/totalVolume
     volumetricTemp = volumetricTemp/totalVolume
     
+    domainDimensionX = 1
     dT_dt_macroscopic = (volumetricTemp - volumetricTemp_old)/(time - time_old)
-   
-    specificHeat = appliedResultantHeatFlux/dT_dt_macroscopic
-    specificHeat_ = (volumetricHeatFlux_1-volumetricHeatFlux_1_old)/dT_dt_macroscopic
+    gradientppliedResultantHeatFlux = appliedResultantHeatFlux/domainDimensionX
+    specificHeat = gradientAppliedResultantHeatFlux/dT_dt_macroscopic
+    specificHeat_ = ((volumetricHeatFlux_1-volumetricHeatFlux_1_old)/domainDimensionX)/dT_dt_macroscopic
     
     time_old = time
     volumetricTemp_old = volumetricTemp
