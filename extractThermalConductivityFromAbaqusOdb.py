@@ -32,7 +32,7 @@ elType=assembly.instances[instanceName[0]].elements[0].type
 print('Element Type: ',str(elType))    
    
 # open files for writing stresses and nodal disp for extensometer region
-outputFileThermalConductivityEffective=open('effectiveThermalConductivity.out','w')
+outputFileThermalConductivityEffective=open('homogenizedThermalConductivity.out','w')
 
 totalNoFrames=len(stepObject.frames) 
 totalTimeSteps=totalNoFrames-1  
@@ -80,26 +80,23 @@ for frameNumber in range(1,totalNoFrames):
     print('K_zx,K_zy,K_zz : ',volumetricHeatFlux_3/volumetricGradT_1,volumetricHeatFlux_3/volumetricGradT_2,volumetricHeatFlux_3/volumetricGradT_3)
     
     if directionGradientApplied == "X":
-        if frameNumber == 1 : outputFileThermalConductivityEffective.write( 'time    q1/GradT_x    q2/GradT_x    q3/GradT_x \n')
+        if frameNumber == 1 : outputFileThermalConductivityEffective.write("{0:20s}{1:20s}{2:20s}{3:20s}\n".format('time','<qx>/<GradT_x>','<qy>/<GradT_x>','qz/GradT_x>'))
         K1 = volumetricHeatFlux_1/volumetricGradT_1 
         K2 = volumetricHeatFlux_2/volumetricGradT_1
         K3 = volumetricHeatFlux_3/volumetricGradT_1
     elif  directionGradientApplied == "Y":
-        if frameNumber == 1 : outputFileThermalConductivityEffective.write( 'time    q1/GradT_y    q2/GradT_y    q3/GradT_y \n')
+        if frameNumber == 1 : outputFileThermalConductivityEffective.write("{0:20s}{1:20s}{2:20s}{3:20s}\n".format('time','<qx>/<GradT_y>','<qy>/<GradT_y>','<qz>/<GradT_y>'))
         K1 = volumetricHeatFlux_1/volumetricGradT_2 
         K2 = volumetricHeatFlux_2/volumetricGradT_2
         K3 = volumetricHeatFlux_3/volumetricGradT_2
     elif  directionGradientApplied == "Z":
-        if frameNumber == 1 : outputFileThermalConductivityEffective.write( 'time    q1/GradT_z    q2/GradT_z    q3/GradT_z \n')
+        if frameNumber == 1 : outputFileThermalConductivityEffective.write("{0:20s}{1:20s}{2:20s}{3:20s}\n".format('time','<qx>/<GradT_z>','<qy>/<GradT_z>','<qz>/<GradT_z>'))
         K1 = volumetricHeatFlux_1/volumetricGradT_3
         K2 = volumetricHeatFlux_2/volumetricGradT_3
         K3 = volumetricHeatFlux_3/volumetricGradT_3
         
-    data = str(time) + '    ' + str(K1) + '    ' + str(K2) + '    ' + str(K3) + '\n'
-    outputFileThermalConductivityEffective.write(data)
+    outputFileThermalConductivityEffective.write("{0:30.15f}{1:30.15f}{2:30.15f}{3:30.15f}\n".format(time,K1,K2,K3))
     
-
-
 outputFileThermalConductivityEffective.close()       
 odb.close()   
 end = wallTime.clock()     
