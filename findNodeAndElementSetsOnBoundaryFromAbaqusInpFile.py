@@ -7,12 +7,12 @@ from parseAbqInpFileForNodalCoords import parseAbqFileForNodalCoordinates
 from parseAbqInpFileForElementConnectivity import parseAbqFileForElementConnectivity
 from findNodesAndElementsOnDomainBoundary import findNodesAndElementsOnDomainBoundary
 from findDomainBoundaries import findDomainBoundaries
-from writeElementSetsInAbaqusInpFormat import writeElementSetsInAbaqusInpFormat
+
 
 def main():
     if len(sys.argv) != 2:
         text = """One command line arguments are expected: \
-                    \n\t(1) Abaqus input file name including """
+                    \n\t(1) Abaqus input file name including extension """
         raise RuntimeError(text)
     
     nameFile = str(sys.argv[1])
@@ -29,19 +29,21 @@ def main():
 def writeNodeSetsInAbaqusInpFormat(pathFileOut,listNamesNodeSets,listNodesOnBoundaries):
     success = False
     with open (pathFileOut,'w') as fileOut:
-        for iBoundary in range(0,len(listNamesElementSets)):
-            for iSurface in range(0,len(listNamesElementSets[0])):
-                if listElementsOnBoundaries[iBoundary][iSurface] != []:
-                    fileOut.write('*NSET, NSET=' + str(listNamesElementSets[iBoundary][iSurface]) + '\n')
-                    str_to_write = '    '
-                    for iElement in range(0,len(listElementsOnBoundaries[iBoundary][iSurface])):
-                        if iElement == len(listElementsOnBoundaries[iBoundary][iSurface])-1:
-                            str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundary][iSurface][iElement])
+        for iBoundarySet in range(0,len(listNamesNodeSets)):
+            if listNodesOnBoundaries[iBoundarySet] != []:
+                fileOut.write('*NSET, NSET=' + str(listNamesNodeSets[iBoundarySet]) + '\n')
+                str_to_write = '    '
+                if len(listNodesOnBoundaries[iBoundarySet]) == 1:
+                   fileOut.write(str_to_write + str(listNodesOnBoundaries[iBoundarySet][0]) + '\n') 
+                else:
+                    for iNode in range(0,len(listNodesOnBoundaries[iBoundarySet])):
+                        if iNode == len(listNodesOnBoundaries[iBoundarySet])-1:
+                            str_to_write = str_to_write + str(listNodesOnBoundaries[iBoundarySet][iNode])
                         else:
-                            str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundary][iSurface][iElement]) + ',   '                        
+                            str_to_write = str_to_write + str(listNodesOnBoundaries[iBoundarySet][iNode]) + ',   '                        
                             
-                        if iElement != 0:
-                            if iElement%7 == 0 or iElement == len(listElementsOnBoundaries[iBoundary][iSurface])-1:
+                        if iNode != 0:
+                            if iNode%7 == 0 or iNode == len(listNodesOnBoundaries[iBoundarySet])-1:
                                 fileOut.write(str_to_write + '\n')
                                 str_to_write = '    '
     fileOut.close()
@@ -52,19 +54,19 @@ def writeNodeSetsInAbaqusInpFormat(pathFileOut,listNamesNodeSets,listNodesOnBoun
 def writeElementSetsInAbaqusInpFormat(pathFileOut,listNamesElementSets,listElementsOnBoundaries):
     success = False
     with open (pathFileOut,'a') as fileOut:
-        for iBoundary in range(0,len(listNamesElementSets)):
+        for iBoundarySet in range(0,len(listNamesElementSets)):
             for iSurface in range(0,len(listNamesElementSets[0])):
-                if listElementsOnBoundaries[iBoundary][iSurface] != []:
-                    fileOut.write('*ELSET, ELSET=' + str(listNamesElementSets[iBoundary][iSurface]) + '\n')
+                if listElementsOnBoundaries[iBoundarySet][iSurface] != []:
+                    fileOut.write('*ELSET, ELSET=' + str(listNamesElementSets[iBoundarySet][iSurface]) + '\n')
                     str_to_write = '    '
-                    for iElement in range(0,len(listElementsOnBoundaries[iBoundary][iSurface])):
-                        if iElement == len(listElementsOnBoundaries[iBoundary][iSurface])-1:
-                            str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundary][iSurface][iElement])
+                    for iElement in range(0,len(listElementsOnBoundaries[iBoundarySet][iSurface])):
+                        if iElement == len(listElementsOnBoundaries[iBoundarySet][iSurface])-1:
+                            str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundarySet][iSurface][iElement])
                         else:
-                            str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundary][iSurface][iElement]) + ',   '                        
+                            str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundarySet][iSurface][iElement]) + ',   '                        
                             
                         if iElement != 0:
-                            if iElement%7 == 0 or iElement == len(listElementsOnBoundaries[iBoundary][iSurface])-1:
+                            if iElement%7 == 0 or iElement == len(listElementsOnBoundaries[iBoundarySet][iSurface])-1:
                                 fileOut.write(str_to_write + '\n')
                                 str_to_write = '    '
     fileOut.close()
