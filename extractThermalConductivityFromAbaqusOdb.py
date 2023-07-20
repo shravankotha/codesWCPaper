@@ -67,14 +67,14 @@ for frameNumber in range(1,totalNoFrames):
         volumetricGradT_1 = volumetricGradT_1 + iGradT.data[0]*volumeIP
         volumetricGradT_2 = volumetricGradT_2 + iGradT.data[1]*volumeIP
         volumetricGradT_3 = volumetricGradT_3 + iGradT.data[2]*volumeIP
-    volumetricHeatFlux_1 = volumetricHeatFlux_1/totalVolume
-    volumetricHeatFlux_2 = volumetricHeatFlux_2/totalVolume
-    volumetricHeatFlux_3 = volumetricHeatFlux_3/totalVolume    
+    volumetricHeatFlux_1 = -volumetricHeatFlux_1/totalVolume
+    volumetricHeatFlux_2 = -volumetricHeatFlux_2/totalVolume
+    volumetricHeatFlux_3 = -volumetricHeatFlux_3/totalVolume    
     volumetricGradT_1 = volumetricGradT_1/totalVolume
     volumetricGradT_2 = volumetricGradT_2/totalVolume
     volumetricGradT_3 = volumetricGradT_3/totalVolume
     
-    print('data:',totalVolume,volumetricHeatFlux_1,volumetricHeatFlux_2,volumetricHeatFlux_3,volumetricGradT_1,volumetricGradT_2,volumetricGradT_3)
+    #print('data:',totalVolume,volumetricHeatFlux_1,volumetricHeatFlux_2,volumetricHeatFlux_3,volumetricGradT_1,volumetricGradT_2,volumetricGradT_3)
     print('K_xx,K_xy,K_xz : ',volumetricHeatFlux_1/volumetricGradT_1,volumetricHeatFlux_1/volumetricGradT_2,volumetricHeatFlux_1/volumetricGradT_3)
     print('K_yx,K_yy,K_yz : ',volumetricHeatFlux_2/volumetricGradT_1,volumetricHeatFlux_2/volumetricGradT_2,volumetricHeatFlux_2/volumetricGradT_3)
     print('K_zx,K_zy,K_zz : ',volumetricHeatFlux_3/volumetricGradT_1,volumetricHeatFlux_3/volumetricGradT_2,volumetricHeatFlux_3/volumetricGradT_3)
