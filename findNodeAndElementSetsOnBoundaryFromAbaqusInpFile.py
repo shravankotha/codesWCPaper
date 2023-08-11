@@ -31,6 +31,7 @@ def writeNodeSetsInAbaqusInpFormat(pathFileOut,listNamesNodeSets,listNodesOnBoun
     with open (pathFileOut,'w') as fileOut:
         for iBoundarySet in range(0,len(listNamesNodeSets)):
             if listNodesOnBoundaries[iBoundarySet] != []:
+                iColumnLineEnd = 7
                 fileOut.write('*NSET, NSET=' + str(listNamesNodeSets[iBoundarySet]) + '\n')
                 str_to_write = '    '
                 if len(listNodesOnBoundaries[iBoundarySet]) == 1:
@@ -43,9 +44,10 @@ def writeNodeSetsInAbaqusInpFormat(pathFileOut,listNamesNodeSets,listNodesOnBoun
                             str_to_write = str_to_write + str(listNodesOnBoundaries[iBoundarySet][iNode]) + ',   '                        
                             
                         if iNode != 0:
-                            if iNode%7 == 0 or iNode == len(listNodesOnBoundaries[iBoundarySet])-1:
+                            if iNode == iColumnLineEnd or iNode == len(listNodesOnBoundaries[iBoundarySet])-1:
                                 fileOut.write(str_to_write + '\n')
                                 str_to_write = '    '
+                                iColumnLineEnd = iColumnLineEnd + 8
     fileOut.close()
     success = True
     return success
@@ -57,6 +59,7 @@ def writeElementSetsInAbaqusInpFormat(pathFileOut,listNamesElementSets,listEleme
         for iBoundarySet in range(0,len(listNamesElementSets)):
             for iSurface in range(0,len(listNamesElementSets[0])):
                 if listElementsOnBoundaries[iBoundarySet][iSurface] != []:
+                    iColumnLineEnd = 7
                     fileOut.write('*ELSET, ELSET=' + str(listNamesElementSets[iBoundarySet][iSurface]) + '\n')
                     str_to_write = '    '
                     for iElement in range(0,len(listElementsOnBoundaries[iBoundarySet][iSurface])):
@@ -66,9 +69,10 @@ def writeElementSetsInAbaqusInpFormat(pathFileOut,listNamesElementSets,listEleme
                             str_to_write = str_to_write + str(listElementsOnBoundaries[iBoundarySet][iSurface][iElement]) + ',   '                        
                             
                         if iElement != 0:
-                            if iElement%7 == 0 or iElement == len(listElementsOnBoundaries[iBoundarySet][iSurface])-1:
+                            if iElement == iColumnLineEnd or iElement == len(listElementsOnBoundaries[iBoundarySet][iSurface])-1:
                                 fileOut.write(str_to_write + '\n')
                                 str_to_write = '    '
+                                iColumnLineEnd = iColumnLineEnd + 8
     fileOut.close()
     success = True
     return success
